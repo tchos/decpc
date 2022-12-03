@@ -24,9 +24,13 @@ class Equipe
     #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Utilisateurs::class)]
     private Collection $utilisateurs;
 
+    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Circonscriptions::class)]
+    private Collection $circonscriptions;
+
     public function __construct()
     {
         $this->utilisateurs = new ArrayCollection();
+        $this->circonscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,5 +90,41 @@ class Equipe
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Circonscriptions>
+     */
+    public function getCirconscriptions(): Collection
+    {
+        return $this->circonscriptions;
+    }
+
+    public function addCirconscription(Circonscriptions $circonscription): self
+    {
+        if (!$this->circonscriptions->contains($circonscription)) {
+            $this->circonscriptions->add($circonscription);
+            $circonscription->setEquipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCirconscription(Circonscriptions $circonscription): self
+    {
+        if ($this->circonscriptions->removeElement($circonscription)) {
+            // set the owning side to null (unless already changed)
+            if ($circonscription->getEquipe() === $this) {
+                $circonscription->setEquipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return $this->libelleEquipe;
     }
 }

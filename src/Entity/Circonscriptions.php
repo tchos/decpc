@@ -21,6 +21,9 @@ class Circonscriptions
     #[ORM\OneToMany(mappedBy: 'circonscription', targetEntity: Tresoreries::class)]
     private Collection $tresoreries;
 
+    #[ORM\ManyToOne(inversedBy: 'circonscriptions')]
+    private ?Equipe $equipe = null;
+
     public function __construct()
     {
         $this->tresoreries = new ArrayCollection();
@@ -71,5 +74,23 @@ class Circonscriptions
         }
 
         return $this;
+    }
+
+    public function getEquipe(): ?Equipe
+    {
+        return $this->equipe;
+    }
+
+    public function setEquipe(?Equipe $equipe): self
+    {
+        $this->equipe = $equipe;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        // TODO: Implement __toString() method.
+        return $this->libelleCirconscription;
     }
 }
